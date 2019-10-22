@@ -1,13 +1,12 @@
-package com.oliva.marc.data
+package com.oliva.marc.data.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.oliva.marc.data.db.contact.DaoContact
 
-@Database(entities = [(ContactEntity::class)], version = 1, exportSchema = false)
+@Database(entities = [(ContactData.Contact::class)], version = 1, exportSchema = false)
 abstract class ContactDB : RoomDatabase() {
-    companion object {
+    /*companion object {
         private var INSTANCE: ContactDB? = null
         fun getDataBase(context: Context): ContactDB {
             if (INSTANCE == null) {
@@ -16,7 +15,7 @@ abstract class ContactDB : RoomDatabase() {
             }
             return INSTANCE as ContactDB
         }
-    }
+    }*/
 
-    abstract fun daoContact(): DaoContact
+    abstract fun contactDao(): DaoContact
 }
