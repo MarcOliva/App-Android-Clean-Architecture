@@ -1,6 +1,7 @@
 package com.oliva.marc.data.db
 
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 interface BaseDao<T> {
 
@@ -19,5 +20,5 @@ interface BaseDao<T> {
     fun updateContact(t:T)
 
 
-    fun deleteContact(t:T)
+    fun deleteContact(t:T): Single<Int>
 }

@@ -9,13 +9,13 @@ sealed class ContactData{
     data class Contact(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "idContact")
-        var id: Int = 0,
+        var id: Int,
 
         @ColumnInfo(name = "name")
-        var name: String = "",
+        var name: String,
 
         @ColumnInfo(name = "number")
-        var number: String = ""
+        var number: String
 
-    )
+    ):ContactData()
 }

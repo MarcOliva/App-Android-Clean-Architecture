@@ -1,0 +1,4 @@
+/*
+package com.oliva.marc.domain.usecases
+
+interface BaseUseCase*/

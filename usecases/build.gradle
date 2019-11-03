@@ -1,12 +1,36 @@
 apply plugin: 'java-library'
-
+apply plugin: 'kotlin'
 dependencies {
     implementation project(':domain')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-common:2.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.9"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.1.0'
 }
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
+buildscript {
+    ext.kotlin_version = '1.3.50'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

@@ -1,27 +1,38 @@
 package com.oliva.marc.app_android_clean_architecture.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import android.widget.TextView
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.oliva.marc.app_android_clean_architecture.R
+import com.oliva.marc.app_android_clean_architecture.databinding.ItemContactBinding
+import com.oliva.marc.data.db.ContactData
+import com.oliva.marc.data.mapper.map
 
-import com.oliva.marc.domain.Entity.Entity
+import com.oliva.marc.domain.entity.Entity
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 
-class ContactRecyclerAdapter(var contactViewModel: ContactViewModel, listener: OnItemClickListener) :
+class ContactRecyclerAdapter(var contactViewModel: HomeViewModel) :
     RecyclerView.Adapter<ContactRecyclerAdapter.ContactHolder>() {
 
+    private val onContactItemClickSubject = PublishSubject.create<Entity.Contact>()
+    val contactItemClickEvent: Observable<Entity.Contact> = onContactItemClickSubject
+
     var contacts: List<Entity.Contact>? = null
-    private var listenerContact: OnItemClickListener = listener
     fun setContactList(contacts: List<Entity.Contact>) {
         this.contacts = contacts
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactHolder {
-        return ContactHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_list, parent, false))
+       val bind : ItemContactBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
+           R.layout.item_contact,parent,false) as ItemContactBinding
+        return ContactHolder(bind)
     }
 
     override fun getItemCount(): Int {
@@ -29,30 +40,29 @@ class ContactRecyclerAdapter(var contactViewModel: ContactViewModel, listener: O
     }
 
     override fun onBindViewHolder(holder: ContactHolder, position: Int) {
-        val currentContact: Entity.Contact? = contacts?.get(position)
-        val nameContact = currentContact?.name
-        val numberContact = currentContact?.number
-
-        holder.mName.text = nameContact
-        holder.mNumber.text = numberContact
-
-        holder.bind(currentContact, listenerContact)
+        holder.bind(contacts?.get(position))
+        //Log.d("PASO",list?.size.toString())
     }
 
 
-    class ContactHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var mName = itemView.findViewById<TextView>(R.id.name_contact)!!
-        var mNumber = itemView.findViewById<TextView>(R.id.number_contact)!!
-
-        fun bind(contact: Entity.Contact?, listener: OnItemClickListener) {
-            itemView.setOnClickListener {
-                listener.onItemClick(contact)
+    inner class ContactHolder(private var itemContactBinding: ItemContactBinding) : RecyclerView.ViewHolder
+    (itemContactBinding.root), View.OnLongClickListener {
+        override fun onLongClick(p0: View?): Boolean {
+            val contact = contacts?.get(adapterPosition)
+            contact?.let {
+                val product: Entity.Contact = contact
+                onContactItemClickSubject.onNext(product)
             }
+            return true
+        }
+
+
+        fun bind(contact: Entity.Contact?) {
+            itemContactBinding.contactEntity = contact
+            itemContactBinding.root.setOnLongClickListener(this)
+            itemContactBinding.executePendingBindings()
         }
 
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(contact: Entity.Contact?)
-    }
 }

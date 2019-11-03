@@ -1,24 +1,23 @@
 package com.oliva.marc.app_android_clean_architecture.ui
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
+import android.view.View
 import com.oliva.marc.app_android_clean_architecture.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.oliva.marc.app_android_clean_architecture.common.extension.observe
+import com.oliva.marc.app_android_clean_architecture.ui.base.BaseActivity
 
-class MainActivity : AppCompatActivity() {
 
-    private var contactViewModel: ContactViewModel? = null
+class MainActivity : BaseActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        contactViewModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
-        fab.setOnClickListener { contactViewModel?.addNewContact(applicationContext) }
-        setupListUpdate()
-    }
 
-    fun setupListUpdate() {
-        // contactViewModel?.getContacts()
     }
+    override fun getNavControllerId(): View = R.id.activityMainHomeHostFragment as View
+
 }
+
+

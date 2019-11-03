@@ -5,6 +5,7 @@ import androidx.room.*
 import com.oliva.marc.data.db.BaseDao
 import com.oliva.marc.data.db.ContactData
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface DaoContact:BaseDao<ContactData.Contact> {
@@ -24,5 +25,5 @@ interface DaoContact:BaseDao<ContactData.Contact> {
     override fun updateContact(t: ContactData.Contact)
 
     @Delete
-    override fun deleteContact(t: ContactData.Contact)
+    override fun deleteContact(t: ContactData.Contact): Single<Int>
 }
