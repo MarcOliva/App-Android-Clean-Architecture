@@ -3,6 +3,7 @@ package com.oliva.marc.data.datasource.contact
 import androidx.lifecycle.LiveData
 import com.oliva.marc.data.db.contact.DaoContact
 import com.oliva.marc.data.mapper.map
+import com.oliva.marc.domain.common.ResultState
 import com.oliva.marc.domain.entity.Entity
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -14,10 +15,8 @@ class ContactsDatabaseDataSourceImpl(
     private val ioExecutor: Executor
 ) : ContactsDatabaseDataSource {
 
-    override fun getContacts(): Flowable<List<Entity.Contact>> = contactDao.getAllContacts().map { it ->
-        it.map {
-            it.map()
-        }
+    override fun getContacts(): Flowable<List<Entity.Contact>> = contactDao.getAllContacts().map{ it ->
+        it.map {  it.map() }
     }
 
     override fun persist(contact: Entity.Contact) {

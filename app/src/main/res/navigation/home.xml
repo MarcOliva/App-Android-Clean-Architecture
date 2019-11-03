@@ -9,8 +9,8 @@
         android:name="com.oliva.marc.app_android_clean_architecture.ui.HomeFragment"
         tools:layout="@layout/fragment_home">
 
-      <action
-            android:id="@+id/navigateToAlbumDetailFragment"
+        <action
+            android:id="@+id/navigateToContactDetailFragment"
             app:destination="@id/contactDetailsFragments"
             app:enterAnim="@anim/enter"
             app:exitAnim="@anim/exit"
@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_details">
 
         <argument
-            android:name="clickedAlbum"
+            android:name="clickedContact"
             app:argType="string" />
 
     </fragment>

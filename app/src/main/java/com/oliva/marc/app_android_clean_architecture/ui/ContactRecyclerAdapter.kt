@@ -1,24 +1,20 @@
 package com.oliva.marc.app_android_clean_architecture.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+
 import androidx.databinding.DataBindingUtil
-import androidx.paging.PagedListAdapter
+
 import androidx.recyclerview.widget.RecyclerView
 import com.oliva.marc.app_android_clean_architecture.R
 import com.oliva.marc.app_android_clean_architecture.databinding.ItemContactBinding
-import com.oliva.marc.data.db.ContactData
-import com.oliva.marc.data.mapper.map
-
 import com.oliva.marc.domain.entity.Entity
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 
-class ContactRecyclerAdapter(var contactViewModel: HomeViewModel) :
+class ContactRecyclerAdapter :
     RecyclerView.Adapter<ContactRecyclerAdapter.ContactHolder>() {
 
     private val onContactItemClickSubject = PublishSubject.create<Entity.Contact>()
@@ -46,20 +42,20 @@ class ContactRecyclerAdapter(var contactViewModel: HomeViewModel) :
 
 
     inner class ContactHolder(private var itemContactBinding: ItemContactBinding) : RecyclerView.ViewHolder
-    (itemContactBinding.root), View.OnLongClickListener {
-        override fun onLongClick(p0: View?): Boolean {
+    (itemContactBinding.root), View.OnClickListener {
+        override fun onClick(p0: View?) {
+
             val contact = contacts?.get(adapterPosition)
             contact?.let {
                 val product: Entity.Contact = contact
                 onContactItemClickSubject.onNext(product)
             }
-            return true
         }
 
 
         fun bind(contact: Entity.Contact?) {
             itemContactBinding.contactEntity = contact
-            itemContactBinding.root.setOnLongClickListener(this)
+            itemContactBinding.root.setOnClickListener(this)
             itemContactBinding.executePendingBindings()
         }
 

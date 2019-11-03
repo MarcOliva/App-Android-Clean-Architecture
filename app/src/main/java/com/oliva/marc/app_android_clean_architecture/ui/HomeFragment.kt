@@ -31,7 +31,11 @@ class HomeFragment : BaseFragment() {
     private val contactViewModel: HomeViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
     }
-    private var adapter: ContactRecyclerAdapter? = null
+    //private var adapter: ContactRecyclerAdapter? = null
+
+    private val adapter: ContactRecyclerAdapter by lazy {
+        ContactRecyclerAdapter()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,33 +47,46 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setAdapter()
         fab.setOnClickListener { context?.let { contactViewModel.addNewContact(view) } }
         observe(contactViewModel.contacts, ::showContacts)
         observe(contactViewModel.deletedContactLiveData, ::onContactDeleted)
         contactViewModel.getContacts()
 
-        setAdapter()
+
     }
 
     @SuppressLint("CheckResult")
-    private fun setAdapter(){
+    private fun setAdapter() {
         recycler_view.layoutManager = LinearLayoutManager(context)
-        adapter =contactViewModel.getRecyclerContactAdapter()
-        adapter?.contactItemClickEvent?.applyIoScheduler()?.subscribe { it ->
+        recycler_view.adapter = adapter
+        adapter.contactItemClickEvent.applyIoScheduler()?.subscribe { it ->
             contactViewModel.deleteContact(it)
         }
-        recycler_view.adapter = adapter
+
     }
 
     private fun showContacts(contacts: List<Entity.Contact>) {
         //Log.d("CONTACT", contacts[0].name)
-        contactViewModel.setContactsInRecyclerAdapter(contacts)
+        adapter.setContactList(contacts)
+        adapter.notifyDataSetChanged()
     }
+
     private fun onContactDeleted(resultState: ResultState<Int>) {
         when (resultState) {
-            is ResultState.Success -> Toast.makeText(activity, "Contact ${resultState.data} deleted", Toast.LENGTH_SHORT).show()
-            is ResultState.Error -> Toast.makeText(activity, resultState.throwable.message, Toast.LENGTH_SHORT).show()
+            is ResultState.Success -> {
+                Toast.makeText(activity, "Contact ${resultState.data} deleted", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            is ResultState.Error -> Toast.makeText(
+                activity,
+                resultState.throwable.message,
+                Toast.LENGTH_SHORT
+            ).show()
         }
+
+
     }
 
 

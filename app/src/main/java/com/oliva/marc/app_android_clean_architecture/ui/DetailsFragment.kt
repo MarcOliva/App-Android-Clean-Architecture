@@ -29,7 +29,6 @@ class DetailsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
@@ -37,7 +36,7 @@ class DetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         save_contact_button.setOnClickListener {
             contactViewModel.saveContact(Entity.Contact(0,name_edit_text.text.toString(),number_edit_text.text.toString()))
-            Navigation.findNavController(view).navigate(R.id.homeFragment)
+            Navigation.findNavController(view).popBackStack()
         }
     }
 }
